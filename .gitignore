@@ -1,3 +1,6 @@
 debug
 *.ncb
 *.suo
+Debug
+Release
+
