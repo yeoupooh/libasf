@@ -34,8 +34,10 @@ asf_fileio_read_cb(void *stream, void *buffer, int size)
 	int ret;
 
 	ret = fread(buffer, 1, size, stream);
-	if (!ret && !feof(stream))
+#ifndef __CYGWIN__
+	if (!ret) && !feof(stream))
 		return -1;
+#endif
 
 	return ret;
 }
@@ -131,7 +133,7 @@ asf_init(asf_file_t *file)
 	}
 	file->position += tmp;
 
-	if (file->flags & ASF_FLAG_SEEKABLE && file->iostream.seek) {
+	if ((file->flags & ASF_FLAG_SEEKABLE) && file->iostream.seek) {
 		int64_t seek_position;
 
 		file->index_position = file->data_position +
